@@ -67,8 +67,8 @@ class _PosteraAndTittle extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Container(
-      margin: EdgeInsets.only(top: 20),
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
           ClipRRect(
@@ -120,7 +120,7 @@ class _OverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Text(
         'Laborum cillum ad culpa Lorem eu ipsum do culpa qui eu nulla. Ullamco mollit enim dolore nulla laboris dolor labore sit. Sit officia velit veniam enim enim. Est sint esse sit laboris incididunt nulla et ullamco id exercitation ad. Labore ex dolor magna sit eu. Cillum sint mollit exercitation ea tempor occaecat voluptate minim dolore pariatur proident exercitation est. Minim eu exercitation laborum consectetur anim deserunt qui consectetur duis sint adipisicing. Adipisicing pariatur proident velit eu excepteur enim voluptate et mollit cillum nostrud nulla. Nisi occaecat do officia aute aliquip nulla enim commodo mollit enim consequat commodo pariatur. Excepteur eiusmod laboris in eu do veniam proident. Culpa officia aliqua culpa nisi est nulla est ullamco anim nostrud excepteur mollit.',
         textAlign: TextAlign.justify,
