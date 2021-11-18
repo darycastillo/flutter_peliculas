@@ -1,7 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_peliculas_app/models/models.dart';
 
-class MovieSlider extends StatelessWidget {
-  const MovieSlider({Key? key}) : super(key: key);
+class MovieSlider extends StatefulWidget {
+  final List<Movie> movies;
+  final String? title;
+  final Function onNextPage;
+
+  MovieSlider(
+      {Key? key, required this.movies, required this.onNextPage, this.title})
+      : super(key: key);
+
+  @override
+  State<MovieSlider> createState() => _MovieSliderState();
+}
+
+class _MovieSliderState extends State<MovieSlider> {
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 500) {
+        widget.onNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,18 +42,21 @@ class MovieSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, bottom: 5),
-            child: Text(
-              "Populares",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          if (widget.title != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 20, bottom: 5),
+              child: Text(
+                widget.title!,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (_, int index) => const _MoviePoster(),
+              itemCount: widget.movies.length,
+              itemBuilder: (_, int index) => _MoviePoster(widget.movies[index]),
             ),
           ),
         ],
@@ -32,7 +66,9 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({Key? key}) : super(key: key);
+  final Movie movie;
+
+  const _MoviePoster(this.movie);
 
   @override
   Widget build(BuildContext context) {
@@ -46,22 +82,22 @@ class _MoviePoster extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () =>
-                Navigator.pushNamed(context, 'details', arguments: 'lo que se'),
+                Navigator.pushNamed(context, 'details', arguments: movie),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: const FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage('https://via.placeholder.com/300x400'),
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/no-image.jpg'),
+                image: NetworkImage(movie.fullPosterImg),
                 width: 130,
                 height: 190,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              "star wras dfasf lsuif l fjsadflasd ",
+              movie.title,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.center,

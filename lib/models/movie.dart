@@ -27,7 +27,7 @@ class Movie {
   String overview;
   double popularity;
   String? posterPath;
-  DateTime? releaseDate;
+  String? releaseDate;
   String title;
   bool video;
   double voteAverage;
@@ -36,6 +36,12 @@ class Movie {
   get fullPosterImg {
     return posterPath != null
         ? 'https://image.tmdb.org/t/p/w500$posterPath'
+        : 'https://i.stack.imgur.com/GNhxO.png';
+  }
+
+  get fullbackdropPathImg {
+    return backdropPath != null
+        ? 'https://image.tmdb.org/t/p/w500$backdropPath'
         : 'https://i.stack.imgur.com/GNhxO.png';
   }
 
@@ -50,8 +56,8 @@ class Movie {
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
-        posterPath: 'https://image.tmdb.org/t/p/w500' + json["poster_path"],
-        releaseDate: DateTime.parse(json["release_date"]),
+        posterPath: json["poster_path"],
+        releaseDate: json["release_date"].toString(),
         title: json["title"],
         video: json["video"],
         voteAverage: json["vote_average"].toDouble(),

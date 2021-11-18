@@ -9,18 +9,35 @@ class MoviesProvider extends ChangeNotifier {
   String _language = 'es-ES';
 
   List<Movie> onDisplayMovies = [];
+  List<Movie> onPopularMovies = [];
+  int _popularMoviesPage = 0;
 
   MoviesProvider() {
     getOnDisplayMovies();
+    getPoularMovie();
+  }
+
+  Future<String> _getJsonData(String endpoint, [int page = 1]) async {
+    var url = Uri.https(_baseUrl, endpoint,
+        {'api_key': _apiKey, 'language': _language, 'page': '$page'});
+
+    final response = await http.get(url);
+    return response.body;
   }
 
   void getOnDisplayMovies() async {
-    var url = Uri.https(_baseUrl, '/3/movie/now_playing',
-        {'api_key': _apiKey, 'language': _language, 'page': '1'});
-
-    final response = await http.get(url);
-    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+    final data = await _getJsonData('/3/movie/now_playing');
+    final nowPlayingResponse = NowPlayingResponse.fromJson(data);
     onDisplayMovies = nowPlayingResponse.results;
+
+    notifyListeners();
+  }
+
+  void getPoularMovie() async {
+    _popularMoviesPage++;
+    final data = await _getJsonData('3/movie/popular', _popularMoviesPage);
+    final popularResponse = PopularResponse.fromJson(data);
+    onPopularMovies = popularResponse.results;
 
     notifyListeners();
   }
